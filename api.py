@@ -23,6 +23,7 @@ try:
 except:
     # Initialize the receipt image data set
     dataset = os.listdir(DATASET)
+    
 
     d = []
     # Process each image in the dataset
