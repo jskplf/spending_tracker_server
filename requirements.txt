@@ -4,3 +4,6 @@ pytesseract
 python-multipart
 Pillow
 pydantic
+pandas 
+gunicorn
+tqdm
