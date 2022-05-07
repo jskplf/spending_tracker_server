@@ -9,7 +9,7 @@ RUN apt-get update \
 
 COPY . .
 
-RUN pip install -r requirements.txt
+RUN pip3 install -r requirements.txt
 
 # For Heroku localhost only, will make the api accsessible on all devices on 
 # local network
