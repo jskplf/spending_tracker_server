@@ -48,11 +48,6 @@ async def index():
     """
         Root endpoint of the api
         - can be used to test if the endpoint is working
-    
-        1. Use threads to a check for one regex on whole document, multiple workers = multiple regex and matchs being found at the same time
-        - each type a regex tests positive for a field give it a vote
-        - assume break up the line based on the amount of votes a type gets 
-        - issue is that 
     """
     return {'status_code': 200, 'message': 'Welcome to 370 backend'} 
 
