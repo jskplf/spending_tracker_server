@@ -100,3 +100,10 @@ def get_success():
         else:
             out[col] = rate
     return out
+
+@app.get('/raw_text/')
+def get_raw_text():
+    """
+        Returns 5 the contents 5 processed receipts
+    """
+    return json.loads(df.head(5)['raw_text'].to_json())

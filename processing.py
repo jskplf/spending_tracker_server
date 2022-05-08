@@ -32,6 +32,7 @@ def process_image(image: Image):
     lines = text.split('\n\n')
     data = {}
     data['store'] = lines[0]
+    data['raw_text'] = lines
     max_newlines = None
     for l in lines:
         if 'SUBTOTAL' in l.upper() or 'TOTAL':
