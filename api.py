@@ -106,4 +106,4 @@ def get_raw_text():
     """
         Returns 5 the contents 5 processed receipts
     """
-    return json.loads(df.sample(10)['raw_text'].to_json())
+    return json.loads(df['raw_text'].to_json())
