@@ -57,7 +57,7 @@ async def upload(files: List[UploadFile] = File(..., description='Multiple image
     try:
         images = [await f.read() for f in files]
         for image in images:
-            data.append(processing.process_image(Image.open(BytesIO(image))))
+            data.append(processing.process_image2(Image.open(BytesIO(image))))
     except:
         return {"status_code": 422, "message": 'Error: Unable to process image',"tracback": traceback.print_exc()}
     return {"status_code" : 200, "data": data}

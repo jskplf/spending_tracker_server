@@ -4,6 +4,12 @@ import re
 from PIL import Image
 import pytesseract
 
+EXPRESSIONS = {}
+EXPRESSIONS['date'] = [r'\d{2,2}/\d{2,2}/\d{2,4}']
+EXPRESSIONS['total'] = []
+EXPRESSIONS['zipcode'] = []
+EXPRESSIONS['state'] = []
+
 def load_data(image: Image):
     '''
         Process an image for data using pytesseract
@@ -15,6 +21,28 @@ def load_data(image: Image):
     data = pytesseract.image_to_data(image)
     return data
 
+def process_image2(image: Image):
+    receipt_data = {}
+    # loop through all of the receipts
+    raw_text = pytesseract.image_to_string(image)
+    receipt_data['raw_text'] = raw_text
+
+    # proccess the raw text
+    # 1. Split the text up by new line characters
+    lines = raw_text.split('\n')
+    # 2. Go through the dictionary of reg exp keys/fields
+    for k in EXPRESSIONS.keys():
+        # A. add the field to the receipt data dictionary
+        receipt_data[k] = []
+        # B. Go through each possible regex to try to find the value
+        for exp in EXPRESSIONS[k]:
+        # a. Go through each line and see if the current regex finds anything
+            for line in lines:
+                if re.search(exp, line):
+                    receipt_data[k].append(re.findall(exp,line))
+        
+
+    return receipt_data
 
 def process_image(image: Image):
     """
