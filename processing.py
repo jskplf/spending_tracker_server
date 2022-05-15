@@ -5,9 +5,9 @@ from PIL import Image
 import pytesseract
 
 EXPRESSIONS = {}
-EXPRESSIONS['date'] = [r'\d{2,2}[-/.]\d{2,2}[-/.]\d{2,4}']
-EXPRESSIONS['total'] = [r'\d+. ?\d\d\D']
-EXPRESSIONS['address'] = [r'[A-Z]{2} \d{5}']
+EXPRESSIONS['date'] = r'\d{2,2}[-.]\d{2,2}[-.]\d{2,4}'
+EXPRESSIONS['total'] = r'\d+. ?\d\d '
+EXPRESSIONS['address'] = r'[A-Z]{2} \d{5}'
 
 def load_data(image: Image):
     '''
@@ -20,30 +20,41 @@ def load_data(image: Image):
     data = pytesseract.image_to_data(image)
     return data
 
-def process_image2(image: Image):
+# This is the current method of processing the receipts 
+# It relies on a global variable call [EXPRESSIONS] which 
+# contains field names and corresponding regex
+def process_image(image: Image):
     receipt_data = {}
     # loop through all of the receipts
     raw_text = pytesseract.image_to_string(image)
     receipt_data['raw_text'] = raw_text
 
     # proccess the raw text
-    # 1. Split the text up by new line characters
-    lines = raw_text.split('\n')
     # 2. Go through the dictionary of reg exp keys/fields
     for k in EXPRESSIONS.keys():
-        # A. add the field to the receipt data dictionary
-        receipt_data[k] = []
-        # B. Go through each possible regex to try to find the value
-        for exp in EXPRESSIONS[k]:
-        # a. Go through each line and see if the current regex finds anything
-            for line in lines:
-                if re.search(exp, line):
-                    receipt_data[k].append(re.findall(exp,line))
+        if (k == 'total'):
+            if(re.findall(EXPRESSIONS[k],raw_text) != []):
+                receipt_data[k] = re.findall(EXPRESSIONS[k],raw_text)[-1]
+            else:
+                receipt_data[k] = 'Missing'
+        elif(k == 'address'):
+            address = re.findall(EXPRESSIONS[k],raw_text)
+            if(address != []):
+                address = address[0].split(' ')
+                receipt_data[k] = {'state': address[0], 'zipcode': address[1]}
+            else:
+                receipt_data[k] ={'state': 'Missing', 'zipcode': 'Missing'}
+        else:
+            if(len(re.findall(EXPRESSIONS[k],raw_text)) ):
+                receipt_data[k] = re.findall(EXPRESSIONS[k],raw_text)
+            else:
+                receipt_data[k] = 'Missing'
         
 
     return receipt_data
 
-def process_image(image: Image):
+# This is the orginal method of parsing the receipt
+def process_image2(image: Image):
     """
         Run custom regex on each line of the receipt 
         and attempt to generate a transaction entry
