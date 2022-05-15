@@ -5,10 +5,9 @@ from PIL import Image
 import pytesseract
 
 EXPRESSIONS = {}
-EXPRESSIONS['date'] = [r'\d{2,2}/\d{2,2}/\d{2,4}']
-# EXPRESSIONS['total'] = [r'\d*+\.?\d{2,2}']
-EXPRESSIONS['zipcode'] = []
-EXPRESSIONS['state'] = []
+EXPRESSIONS['date'] = [r'\d{2,2}[-/.]\d{2,2}[-/.]\d{2,4}']
+EXPRESSIONS['total'] = [r'\d+. ?\d\d\D']
+EXPRESSIONS['address'] = [r'[A-Z]{2} \d{5}']
 
 def load_data(image: Image):
     '''
