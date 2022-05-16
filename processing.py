@@ -50,7 +50,8 @@ def process_image(image: Image):
             else:
                 receipt_data[k] = 'Missing'
         
-
+    receipt_data['category'] = 'Missing'
+    receipt_data['store'] = raw_text.split('\n')[0]
     return receipt_data
 
 # This is the orginal method of parsing the receipt
