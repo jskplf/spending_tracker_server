@@ -40,10 +40,10 @@ def process_image(image: Image):
         elif(k == 'address'):
             address = re.findall(EXPRESSIONS[k],raw_text)
             if(address != []):
-                address = address[0].split(' ')
-                receipt_data[k] = {'state': address[0], 'zipcode': address[1]}
+                address = address[0]
+                receipt_data[k] = address
             else:
-                receipt_data[k] ={'state': 'Missing', 'zipcode': 'Missing'}
+                receipt_data[k] ='Missing'
         else:
             if(len(re.findall(EXPRESSIONS[k],raw_text)) ):
                 receipt_data[k] = re.findall(EXPRESSIONS[k],raw_text)
